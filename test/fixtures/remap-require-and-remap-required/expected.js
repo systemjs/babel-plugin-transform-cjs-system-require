@@ -1,8 +1,10 @@
 (function ($__require) {
   if (typeof $__require != 'undefined' && eval('typeof $__require') == 'undefined') {
-    return;
+    exports.cjs = true;
   }
-  $__require('withoutT');
-  $__require('withTrai');
-  $__require('some' + 'expression');
+  if (false) {
+    $__require('withoutT');
+    $__require('withTrai');
+    $__require('some' + 'expression');
+  }
 })($__require);

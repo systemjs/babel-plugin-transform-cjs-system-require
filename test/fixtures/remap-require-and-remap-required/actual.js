@@ -1,8 +1,10 @@
-(function(require) {
+(function (require) {
   if (typeof require != 'undefined' && eval('typeof require') == 'undefined') {
-    return;
+    exports.cjs = true;
   }
-  require('withoutTrailingSlash');
-  require('withTrailingSlash/');
-  require('some' + 'expression');
+  if (false) {
+    require('withoutTrailingSlash');
+    require('withTrailingSlash');
+    require('some' + 'expression');
+  }
 })(require);
