@@ -3,8 +3,8 @@
     exports.cjs = true;
   }
   if (false) {
-    require('withoutTrailingSlash');
-    require('withTrailingSlash');
+    require('foo');
+    require('bar/');
     require('some' + 'expression');
   }
 })(require);

@@ -3,8 +3,8 @@
     exports.cjs = true;
   }
   if (false) {
-    $__foo('withoutTrailingSlash');
-    $__foo('withTrailingSlash');
+    $__foo('foo');
+    $__foo('bar');
     $__foo('some' + 'expression');
   }
 })($__foo);
