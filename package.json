@@ -1,10 +1,10 @@
 {
-  "name": "babel-plugin-transform-cjs-require",
+  "name": "babel-plugin-transform-cjs-system-require",
   "version": "0.0.0",
-  "description": "Transforms all calls of `require` into calls of `$__require` or another mapped identifier.",
+  "description": "Transforms all calls of `require` into calls of the SystemJS internal `$__require`.",
   "repository": {
     "type": "git",
-    "url": "http://github.com/jrauschenbusch/babel-plugin-transform-cjs-require.git"
+    "url": "http://github.com/jrauschenbusch/babel-plugin-transform-cjs-system-require.git"
   },
   "author": "Jochen Rauschenbusch",
   "license": "MIT",

@@ -1,6 +1,6 @@
-# babel-plugin-transform-remap-require
+# babel-plugin-transform-cjs-system-require
 
-Remaps all occurrences of `require` inside a source script to another identifier.
+Transforms all calls of `require` into calls of the SystemJS internal `$__require`.
 
 ## Example
 
@@ -19,7 +19,7 @@ $__require('test');
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-remap-require
+$ npm install babel-plugin-transform-cjs-system-require
 ```
 
 ## Usage
@@ -31,10 +31,7 @@ $ npm install babel-plugin-transform-remap-require
 ```json
 {
   "plugins": [
-    ["transform-remap-require", {
-      requireName: "require",
-      mappedRequireName: "$__require"
-    }]
+    ["transform-cjs-system-require", {}]
   ]
 }
 ```
@@ -42,7 +39,7 @@ $ npm install babel-plugin-transform-remap-require
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-remap-require script.js
+$ babel --plugins transform-cjs-system-require script.js
 ```
 
 ### Via Node API (Recommended)
@@ -50,10 +47,10 @@ $ babel --plugins transform-remap-require script.js
 ```javascript
 require("babel-core").transform("code", {
   plugins: [
-    ["transform-remap-require", {
-      requireName: "require",
-      mappedRequireName: "$__require",
-      map: function(name) {
+    ["transform-cjs-system-require", {
+      requireName: "require", // optional
+      mappedRequireName: "$__require", // optional
+      map: function(name) { // optional
         return normalize(name);
       }
     }]
