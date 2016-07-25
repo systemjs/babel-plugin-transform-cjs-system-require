@@ -1,15 +1,22 @@
 export default function ({types: t}) {
   return {
     visitor: {
-      CallExpression: function CallExpression(path, state) {
-        var opts = state.opts === undefined ? {} : state.opts;
+      CallExpression(path, { opts = {} }) {
+        const callee = path.node.callee;
+        const args = path.node.arguments;
 
-        var callee = path.node.callee;
-        var args = path.node.arguments;
+        const {
+          requireName = 'require',
+          mappedRequireName = '$__require',
+          map
+        } = opts;
 
         // found an eval potentially containing a require
-        if (t.isIdentifier(callee, {name: 'eval'}) && args.length === 1) {
-          let evaluate = path.get('arguments')[0].evaluate();
+        if (t.isIdentifier(callee, { name: 'eval' }) &&
+          args.length === 1) {
+
+          let evalArgument = path.get('arguments')[0];
+          let evaluate = evalArgument.evaluate();
 
           if (!evaluate.confident) {
             return;
@@ -20,30 +27,35 @@ export default function ({types: t}) {
             return;
           }
 
-          code = code.replace(opts.requireName, opts.mappedRequireName);
+          code = code.replace(requireName, mappedRequireName);
+          code = t.stringLiteral(code);
 
-          path.get('arguments')[0].replaceWith(t.stringLiteral(code));
+          evalArgument.replaceWith(code);
         }
 
         // found a require
-        if (t.isIdentifier(callee, {name: opts.requireName}) && args.length && args.length == 1) {
+        if (t.isIdentifier(callee, { name: requireName }) &&
+          args.length &&
+          args.length == 1) {
 
           // require('x');
           if (t.isStringLiteral(args[0])) {
 
-            var requireModule = args[0].value;
+            let requiredModuleName = args[0].value;
 
             // mirror behaviour at https://github.com/systemjs/systemjs/blob/0.19.8/lib/cjs.js#L50 to remove trailing slash
-            if (requireModule[requireModule.length - 1] == '/') {
-              requireModule = requireModule.substr(0, requireModule.length - 1);
+            if (requiredModuleName[requiredModuleName.length - 1] == '/') {
+              requiredModuleName = requiredModuleName.substr(0, requiredModuleName.length - 1);
             }
 
-            var requireModuleMapped = opts.map && opts.map(requireModule) || requireModule;
+            if (map && typeof map === 'function') {
+              requiredModuleName = map(requiredModuleName);
+            }
 
             path.replaceWith(
               t.callExpression(
-                t.identifier(opts.mappedRequireName),
-                [t.stringLiteral(requireModuleMapped)]
+                t.identifier(mappedRequireName),
+                [t.stringLiteral(requiredModuleName)]
               )
             );
           }
@@ -51,18 +63,21 @@ export default function ({types: t}) {
           else {
             path.replaceWith(
               t.callExpression(
-                t.identifier(opts.mappedRequireName),
-                [...args]
+                t.identifier(mappedRequireName),
+                args
               )
             );
           }
         }
       },
-      Identifier: function Identifier(path, state) {
-        var opts = state.opts === undefined ? {} : state.opts;
+      Identifier(path, { opts = {} }) {
+        let {
+          requireName = 'require',
+          mappedRequireName = '$__require'
+        } = opts;
 
-        if (path.node.name === opts.requireName) {
-          path.node.name = opts.mappedRequireName;
+        if (path.node.name === requireName) {
+          path.node.name = mappedRequireName;
         }
       }
     }
