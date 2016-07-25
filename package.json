@@ -1,10 +1,10 @@
 {
-  "name": "babel-plugin-transform-remap-require",
+  "name": "babel-plugin-transform-cjs-require",
   "version": "0.0.0",
-  "description": "Remaps all occurrences of `require` inside a source script to another identifier.",
+  "description": "Transforms all calls of `require` into calls of `$__require` or another mapped identifier.",
   "repository": {
     "type": "git",
-    "url": "http://github.com/jrauschenbusch/babel-plugin-transform-remap-require.git"
+    "url": "http://github.com/jrauschenbusch/babel-plugin-transform-cjs-require.git"
   },
   "author": "Jochen Rauschenbusch",
   "license": "MIT",
