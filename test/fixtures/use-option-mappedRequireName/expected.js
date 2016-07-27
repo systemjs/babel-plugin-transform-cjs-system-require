@@ -1,5 +1,5 @@
 (function ($__foo) {
-  if (typeof $__foo != 'undefined' && eval('typeof $__foo') == 'undefined') {
+  if (typeof $__foo != 'undefined' && eval('typeof require') == 'undefined') {
     exports.cjs = true;
   }
   if (false) {

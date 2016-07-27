@@ -1,5 +1,8 @@
 export default function ({types: t}) {
   return {
+    pre() {
+      this.requires = [];
+    },
     visitor: {
       CallExpression(path, { opts = {} }) {
         const callee = path.node.callee;
@@ -10,28 +13,6 @@ export default function ({types: t}) {
           mappedRequireName = '$__require',
           map
         } = opts;
-
-        // found an eval potentially containing a require
-        if (t.isIdentifier(callee, { name: 'eval' }) &&
-          args.length === 1) {
-
-          let evalArgument = path.get('arguments')[0];
-          let evaluate = evalArgument.evaluate();
-
-          if (!evaluate.confident) {
-            return;
-          }
-
-          let code = evaluate.value;
-          if (typeof code !== 'string') {
-            return;
-          }
-
-          code = code.replace(requireName, mappedRequireName);
-          code = t.stringLiteral(code);
-
-          evalArgument.replaceWith(code);
-        }
 
         // found a require
         if (t.isIdentifier(callee, { name: requireName }) &&
@@ -48,9 +29,11 @@ export default function ({types: t}) {
               requiredModuleName = requiredModuleName.substr(0, requiredModuleName.length - 1);
             }
 
-            if (map && typeof map === 'function') {
-              requiredModuleName = map(requiredModuleName);
+            if (opts.map && typeof opts.map === 'function') {
+              requiredModuleName = opts.map(requiredModuleName) || requiredModuleName;
             }
+
+            this.requires.push(requiredModuleName);
 
             path.replaceWith(
               t.callExpression(

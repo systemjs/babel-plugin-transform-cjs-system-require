@@ -1,5 +1,5 @@
 module.exports = {
-	map: function(name) {
-		return name.substring(0, 2);
+	map: (moduleName) => {
+		return moduleName.substring(0, 2);
 	}
 };
