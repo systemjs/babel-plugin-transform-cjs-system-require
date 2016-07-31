@@ -16,7 +16,6 @@ export default function ({types: t}) {
 
         // found a require
         if (t.isIdentifier(callee, { name: requireName }) &&
-          args.length &&
           args.length == 1) {
 
           // require('x');
@@ -29,8 +28,8 @@ export default function ({types: t}) {
               requiredModuleName = requiredModuleName.substr(0, requiredModuleName.length - 1);
             }
 
-            if (opts.map && typeof opts.map === 'function') {
-              requiredModuleName = opts.map(requiredModuleName) || requiredModuleName;
+            if (typeof map === 'function') {
+              requiredModuleName = map(requiredModuleName) || requiredModuleName;
             }
 
             this.requires.push(requiredModuleName);
