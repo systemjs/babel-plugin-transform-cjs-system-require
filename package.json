@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-cjs-system-require",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Transforms all calls of `require` into calls of the SystemJS internal `$__require`.",
   "repository": {
     "type": "git",
