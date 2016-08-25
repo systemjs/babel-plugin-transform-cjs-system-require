@@ -42,24 +42,20 @@ export default function ({types: t}) {
             );
           }
           // require(expr)';
-          else {
-            path.replaceWith(
-              t.callExpression(
-                t.identifier(mappedRequireName),
-                args
-              )
-            );
-          }
         }
       },
       Identifier(path, { opts = {} }) {
+        if (t.isObjectProperty(path.parent) || t.isMemberExpression(path.parent)) {
+          return;
+        }
+
         let {
           requireName = 'require',
           mappedRequireName = '$__require'
         } = opts;
 
         if (path.node.name === requireName) {
-          path.node.name = mappedRequireName;
+          path.replaceWith(t.identifier(mappedRequireName));
         }
       }
     }
