@@ -3,3 +3,5 @@ var p = {
 };
 
 if (p.require === window.require) p.require();
+
+$__require.resolve('x');

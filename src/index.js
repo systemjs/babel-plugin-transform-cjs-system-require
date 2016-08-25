@@ -45,7 +45,7 @@ export default function ({types: t}) {
         }
       },
       Identifier(path, { opts = {} }) {
-        if (t.isObjectProperty(path.parent) || t.isMemberExpression(path.parent)) {
+        if (t.isObjectProperty(path.parent) || t.isMemberExpression(path.parent) && path.parent.object !== path.node) {
           return;
         }
 
